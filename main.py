@@ -1,10 +1,17 @@
 # main.py
 from flask import Flask, request, jsonify
 # 导入第三方库
-import requests, json
+import requests
 from openai import OpenAI
 
 app = Flask(__name__)
+
+#默认用户收藏地点
+user_favorites = {
+    '0001': ['大梅沙', '故宫', '天安门'],
+    '0002': ['深圳天文台', '拱北口岸'],
+    # 更多用户...
+}
 
 
 @app.route('/Loongo/tuijian', methods=['GET'])
@@ -89,6 +96,28 @@ def handle_get():
     response_data["code"] = 200
     response_data["data"]["result"] = answer  # 填充answer到result中
     return jsonify(response_data)  # 返回response_data
+
+
+@app.route('/Loongo/star', methods=['GET'])
+def handle_star():
+    coordines = request.args.get('user_id')
+    api_key = '0c8c5707c9a878a15cd1239471072e44'
+    # 检查用户ID是否存在
+    print('user_id')
+    if coordines in user_favorites:
+        # 获取用户收藏的地点名称列表
+        favorite_locations = user_favorites[coordines]
+
+        # 使用get_location_coordinates函数获取每个地点的坐标
+        favorites_with_coordinates = {
+            location: get_location_coordinates(location, api_key) for location in favorite_locations
+        }
+
+        # 返回包含地点名称和坐标的JSON对象
+        return jsonify(favorites_with_coordinates)
+    else:
+        # 如果用户ID不存在，返回错误信息
+        return jsonify({'error': 'User not found'}), 404
 
 
 def get_location_coordinates(place_name, api_key):
