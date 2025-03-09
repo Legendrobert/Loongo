@@ -5,6 +5,7 @@ import deepl
 from openai import OpenAI
 import sqlite3 
 from utils import get_location_coordinates, update_location 
+from gain_pic_url import get_bing_image_urls
 user_favorites = {
     '0001': ['大梅沙', '故宫', '天安门'],
     '0002': ['深圳天文台', '拱北口岸'],
@@ -195,3 +196,50 @@ def build_response(code, result=None, msg=None):
         "msg": msg
     }
     return response
+
+
+
+def process_loc_detail():
+    client = OpenAI(
+        api_key="sk-rkYmrbXbl6IQ21a7xKfiGLS8pTEWO9gJ6h2t7I47huQdm5uE",
+        base_url="https://api.moonshot.cn/v1",
+    )
+    user_input = request.args.get('location_name')
+    response_data = {
+        "code": 0,
+        "msg": "location_details",
+        "data": {"result": ""}
+    }
+    completion = client.chat.completions.create(
+        model="moonshot-v1-8k",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "你是一个旅行官和导游，要求根据用户提供的地点信息返回景点详情。"
+                    "请以以下JSON结构返回并要求内容为英文："
+                    "{"
+                    "\"suggested_visit_time\": \"建议游玩时间,直接返回时间（x-x天），不要其他内容\","
+                    "\"activity_suggestions\": \"游玩项目建议（特色介绍），如果有顺序的话也请构成json结构体\","
+                    "\"site_description\": \"景点介绍\""
+                    "}"
+                )
+            },
+            {
+                "role": "user",
+                "content": user_input
+            },
+        ],
+        temperature=0.3,
+    )
+    answer = completion.choices[0].message.content
+    try:
+        result_data = json.loads(answer)
+        pic_urls = get_bing_image_urls(user_input)
+        result_data["pic_url"] = pic_urls
+        response_data["code"] = 200
+        response_data["data"]["result"] = result_data
+    except json.JSONDecodeError:
+        response_data["code"] = 500
+        response_data["msg"] = "Invalid JSON format"
+    return jsonify(response_data)

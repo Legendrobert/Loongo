@@ -9,32 +9,45 @@ from handlers4app import (
     process_star_request,
     process_translate_request,
     process_RotePlanSave_request,
-    process_RotePlanGet_request
+    process_RotePlanGet_request,
+    process_loc_detail
 )
 
 app = Flask(__name__)
 
 @app.route('/Loongo/tuijian', methods=['GET'])
+#地点推荐
 def handle_post():
     return process_tuijian_request()
 
 @app.route('/Loongo/aichat', methods=['GET'])
+#ai智能语音聊天
 def handle_get():
     return process_aichat_request()
 
+
+@app.route('/Loongo/loc_detail', methods=['GET'])
+#ai智能语音聊天
+def handle_loc():
+    return process_loc_detail()
+
 @app.route('/Loongo/star', methods=['GET'])
+#收藏接口
 def handle_star():
     return process_star_request()
 
 @app.route('/Loongo/translate', methods=['GET'])
+#翻译接口
 def handle_translate():
     return process_translate_request()
 
 @app.route('/Loongo/RotePlanSave', methods=['POST'])
+#路径规划保存
 def handle_RotePlkan():
     return process_RotePlanSave_request()
 
 @app.route('/Loongo/RotePlanGet', methods=['GET'])
+#路径规划获取
 def handle_RotePlanGet():
     return process_RotePlanGet_request()
 
