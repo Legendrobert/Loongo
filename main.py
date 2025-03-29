@@ -53,13 +53,19 @@ def handle_RotePlanGet():
 
 
 
+# if __name__ == '__main__':
+#     # kimi的api-key
+#     # sk-rkYmrbXbl6IQ21a7xKfiGLS8pTEWO9gJ6h2t7I47huQdm5uE
+#     # 使用示例
+#     try:
+#         print("服务启动中...")
+#         app.run(host="0.0.0.0", port=3000, debug=True)
+#     except Exception as e:  # 修改为 Exception 以捕获所有异常
+#         print(f"发生错误: {e}")  # 打印错误信
+#     ##测试用澳门大三巴的location是113.552458,22.200815
+
 if __name__ == '__main__':
-    # kimi的api-key
-    # sk-rkYmrbXbl6IQ21a7xKfiGLS8pTEWO9gJ6h2t7I47huQdm5uE
-    # 使用示例
-    try:
-        print("服务启动中...")
-        app.run(host="0.0.0.0", port=3000, debug=True)
-    except Exception as e:  # 修改为 Exception 以捕获所有异常
-        print(f"发生错误: {e}")  # 打印错误信
-    ##测试用澳门大三巴的location是113.552458,22.200815
+    # 生产环境下使用环境变量中的端口或默认5000
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

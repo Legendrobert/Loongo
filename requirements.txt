@@ -1,0 +1,6 @@
+beautifulsoup4==4.13.3
+deepl==1.21.1
+Flask==3.1.0
+openai==1.69.0
+Requests==2.32.3
+gunicorn==23.0.0
