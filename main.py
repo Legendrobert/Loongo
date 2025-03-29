@@ -27,7 +27,7 @@ def handle_get():
 
 
 @app.route('/Loongo/loc_detail', methods=['GET'])
-#ai智能语音聊天
+#ai本地内容推荐
 def handle_loc():
     return process_loc_detail()
 

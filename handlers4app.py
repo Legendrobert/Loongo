@@ -220,7 +220,7 @@ def process_loc_detail():
                     "请以以下JSON结构返回并要求内容为英文："
                     "{"
                     "\"suggested_visit_time\": \"建议游玩时间,直接返回时间（x-x天），不要其他内容\","
-                    "\"activity_suggestions\": \"游玩项目建议（特色介绍），如果有顺序的话也请构成json结构体\","
+                    "\"activity_suggestions\": \"游玩项目建议（特色介绍），如果有顺序的话也请构成list列表的形式\","
                     "\"site_description\": \"景点介绍\""
                     "}"
                 )
